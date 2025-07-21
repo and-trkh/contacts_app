@@ -1,37 +1,33 @@
 <script lang="ts">
   import { db, type Contact } from '$lib/db/contactsDB';
   import { onMount, createEventDispatcher } from 'svelte';
+  import ContactFields from './ContactFields.svelte'; // Импортируем новый компонент
 
   export let contact: Contact | null = null;
 
   const dispatch = createEventDispatcher();
 
-  let name = '';
-  let phone = '';
-  let email = '';
-  let address = '';
+  // Используем один объект для данных формы
+  let contactData: Contact = {
+    id: contact?.id,
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+    createdAt: contact?.createdAt || new Date(),
+    updatedAt: new Date()
+  };
 
   onMount(() => {
     if (contact) {
-      name = contact.name;
-      phone = contact.phone;
-      email = contact.email;
-      address = contact.address || '';
+      // Копируем данные из prop в contactData
+      contactData = { ...contact };
     }
   });
 
   async function saveContact() {
-    const contactData = {
-      name,
-      phone,
-      email,
-      address: address || undefined,
-      createdAt: contact?.createdAt || new Date(),
-      updatedAt: new Date()
-    };
-
-    if (contact?.id) {
-      await db.contacts.update(contact.id, contactData);
+    if (contactData.id) {
+      await db.contacts.update(contactData.id, contactData);
     } else {
       await db.contacts.add(contactData);
     }
@@ -49,47 +45,9 @@
   }}
 />
 
-<form on:submit|preventDefault={saveContact} class="space-y-4">
-  <div>
-    <label for="name" class="block text-sm font-medium text-gray-700">Имя</label>
-    <input
-      id="name"
-      bind:value={name}
-      required
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    />
-  </div>
-
-  <div>
-    <label for="phone" class="block text-sm font-medium text-gray-700">Телефон</label>
-    <input
-      id="phone"
-      type="tel"
-      bind:value={phone}
-      required
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    />
-  </div>
-
-  <div>
-    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-    <input
-      id="email"
-      type="email"
-      bind:value={email}
-      required
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    />
-  </div>
-
-  <div>
-    <label for="address" class="block text-sm font-medium text-gray-700">Адрес (опционально)</label>
-    <textarea
-      id="address"
-      bind:value={address}
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-    ></textarea>
-  </div>
+<form on:submit|preventDefault={saveContact} class="space-y-4 p-4">
+  <ContactFields contact={contactData} />
+  <!-- Используем новый компонент -->
 
   <div class="flex justify-end space-x-2">
     <button

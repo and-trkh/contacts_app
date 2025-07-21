@@ -1,6 +1,7 @@
 <script lang="ts">
   import { db, type Contact } from '$lib/db/contactsDB';
   import { fly } from 'svelte/transition';
+  import ContactFields from './ContactFields.svelte';
 
   export let contact: Contact;
   export let onClose: () => void;
@@ -40,20 +41,21 @@
   class="fixed inset-0 z-10 bg-black/30 transition-opacity"
   aria-hidden="true"
   on:click={onClose}
-/>
+></div>
 
 <!-- Панель модального окна -->
 <div
-  class="fixed inset-0 z-20 flex min-h-full items-center justify-center p-4"
+  class="fixed inset-0 z-20 flex min-h-full items-center justify-center p-4 sm:p-0"
   transition:fly={{ y: -50, duration: 300 }}
 >
   <div
-    class="relative w-full max-w-lg transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
+    class="relative max-h-[90vh] w-full max-w-lg transform overflow-hidden overflow-y-auto rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
     tabindex="-1"
     on:click|stopPropagation
+    on:keydown={() => {}}
   >
     <form on:submit|preventDefault={handleSave}>
       <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -61,45 +63,7 @@
           Редактировать контакт
         </h3>
         <div class="mt-4 grid grid-cols-1 gap-y-6">
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Имя</label>
-            <input
-              type="text"
-              id="name"
-              bind:value={editableContact.name}
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              bind:value={editableContact.email}
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700">Телефон</label>
-            <input
-              type="tel"
-              id="phone"
-              bind:value={editableContact.phone}
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div>
-            <label for="address" class="block text-sm font-medium text-gray-700">Адрес</label>
-            <input
-              type="text"
-              id="address"
-              bind:value={editableContact.address}
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
+          <ContactFields contact={editableContact} />
         </div>
       </div>
       <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">

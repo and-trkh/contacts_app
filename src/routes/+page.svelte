@@ -50,7 +50,7 @@
           aria-hidden="true"
           on:click={closeModal}
           on:keydown={(e) => {
-            if (e.key === 'Escape') {
+            if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
               closeModal();
             }
           }}
@@ -58,15 +58,13 @@
           tabindex="0"
         ></div>
 
-        <div
-          class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0"
-        >
+        <div class="flex min-h-screen items-end justify-center p-4 sm:p-0">
           <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true"
             >&#8203;</span
           >
 
           <div
-            class="relative z-20 inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
+            class="relative z-20 inline-block max-h-[90vh] transform overflow-hidden overflow-y-auto rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
           >
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <h2 class="mb-4 text-lg font-medium text-gray-900">
