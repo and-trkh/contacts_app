@@ -1,12 +1,11 @@
 <script lang="ts">
   import { db, type Contact } from '$lib/db/contactsDB';
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount } from 'svelte';
   import { fly } from 'svelte/transition';
   import ContactFields from './ContactFields.svelte'; // Импортируем новый компонент
 
-  const dispatch = createEventDispatcher();
-
   export let contact: Contact | null = null;
+  export let onClose: () => void;
 
   // Используем один объект для данных формы
   let contactData: Contact = {
@@ -32,13 +31,13 @@
     } else {
       await db.contacts.add(contactData);
     }
-    dispatch('close'); // Отправить событие 'close' после сохранения
+    onClose();
   }
 
   // Закрываем модальное окно по нажатию на Escape
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      dispatch('close');
+      onClose();
     }
   }
 </script>
@@ -49,7 +48,7 @@
 <div
   class="fixed inset-0 z-10 bg-black/30 transition-opacity"
   aria-hidden="true"
-  on:click={() => dispatch('close')}
+  on:click={onClose}
 ></div>
 
 <!-- Панель модального окна -->
@@ -84,7 +83,7 @@
         </button>
         <button
           type="button"
-          on:click={() => dispatch('close')}
+          on:click={onClose}
           class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
         >
           Отмена
