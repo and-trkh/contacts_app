@@ -37,7 +37,7 @@
 
 <!-- Фон модального окна -->
 <div
-	class="bg-opacity-75 fixed inset-0 z-10 bg-gray-500 transition-opacity"
+	class="fixed inset-0 z-10 bg-black/30 transition-opacity"
 	aria-hidden="true"
 	on:click={onClose}
 />
