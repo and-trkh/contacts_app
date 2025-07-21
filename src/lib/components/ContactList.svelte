@@ -6,16 +6,17 @@
 
 	const dispatch = createEventDispatcher();
 	export let searchTerm = '';
-	const contactQuery = liveQuery(async () => {
-		if (!searchTerm) {
+	$: contactQuery = liveQuery(async () => {
+		const lowerCaseSearchTerm = searchTerm.toLowerCase();
+		if (!lowerCaseSearchTerm) {
 			return db.contacts.toArray();
 		}
 		return db.contacts
 			.filter((contact) => {
 				return (
-					contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					contact.name.toLowerCase().includes(lowerCaseSearchTerm) ||
 					contact.phone.includes(searchTerm) ||
-					contact.email.toLowerCase().includes(searchTerm.toLowerCase())
+					contact.email.toLowerCase().includes(lowerCaseSearchTerm)
 				);
 			})
 			.toArray();
