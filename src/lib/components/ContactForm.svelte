@@ -2,12 +2,11 @@
   import { db, type Contact } from '$lib/db/contactsDB';
   import { onMount } from 'svelte';
   import { fly } from 'svelte/transition';
-  import ContactFields from './ContactFields.svelte'; // Импортируем новый компонент
+  import ContactFields from './ContactFields.svelte';
 
   export let contact: Contact | null = null;
   export let onClose: () => void;
 
-  // Используем один объект для данных формы
   let contactData: Contact = {
     id: contact?.id,
     name: '',
@@ -20,7 +19,6 @@
 
   onMount(() => {
     if (contact) {
-      // Копируем данные из prop в contactData
       contactData = { ...contact };
     }
   });
@@ -34,7 +32,6 @@
     onClose();
   }
 
-  // Закрываем модальное окно по нажатию на Escape
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       onClose();
@@ -44,14 +41,12 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<!-- Фон модального окна -->
 <div
   class="fixed inset-0 z-10 bg-black/30 transition-opacity"
   aria-hidden="true"
   on:click={onClose}
 ></div>
 
-<!-- Панель модального окна -->
 <div
   class="fixed inset-0 z-20 flex min-h-full items-center justify-center p-4 sm:p-0"
   transition:fly={{ y: -50, duration: 300 }}

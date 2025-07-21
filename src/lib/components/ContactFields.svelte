@@ -1,8 +1,7 @@
-<!-- src/lib/components/ContactFields.svelte -->
 <script lang="ts">
   import type { Contact } from '$lib/db/contactsDB';
 
-  export let contact: Contact; // Принимаем объект контакта для привязки
+  export let contact: Contact;
 </script>
 
 <div>

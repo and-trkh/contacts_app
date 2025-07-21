@@ -6,27 +6,23 @@
   export let contact: Contact;
   export let onClose: () => void;
 
-  // Создаем локальную копию для редактирования, чтобы не изменять prop напрямую
   let editableContact = { ...contact };
 
   async function handleSave() {
     if (!contact.id) return;
     try {
-      // Обновляем только те поля, которые могут быть изменены
       await db.contacts.update(contact.id, {
         name: editableContact.name,
         email: editableContact.email,
         phone: editableContact.phone,
         address: editableContact.address
       });
-      onClose(); // Закрываем модальное окно после успешного сохранения
+      onClose();
     } catch (error) {
       console.error('Не удалось обновить контакт:', error);
-      // Здесь можно добавить уведомление для пользователя об ошибке
     }
   }
 
-  // Закрываем модальное окно по нажатию на Escape
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       onClose();
@@ -36,14 +32,12 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<!-- Фон модального окна -->
 <div
   class="fixed inset-0 z-10 bg-black/30 transition-opacity"
   aria-hidden="true"
   on:click={onClose}
 ></div>
 
-<!-- Панель модального окна -->
 <div
   class="fixed inset-0 z-20 flex min-h-full items-center justify-center p-4 sm:p-0"
   transition:fly={{ y: -50, duration: 300 }}
