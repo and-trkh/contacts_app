@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { db, type Contact } from '$lib/db/contactsDB';
-	import { onMount } from 'svelte';
+	import { onMount, createEventDispatcher } from 'svelte';
 
 	export let contact: Contact | null = null;
+
+	const dispatch = createEventDispatcher();
 
 	let name = '';
 	let phone = '';
@@ -33,8 +35,19 @@
 		} else {
 			await db.contacts.add(contactData);
 		}
+		dispatch('close'); // Закрыть форму после сохранения
+	}
+
+	function closeForm() {
+		dispatch('close');
 	}
 </script>
+
+<svelte:window
+	on:keydown={(e) => {
+		if (e.key === 'Escape') closeForm();
+	}}
+/>
 
 <form on:submit|preventDefault={saveContact} class="space-y-4">
 	<div>
@@ -81,6 +94,7 @@
 	<div class="flex justify-end space-x-2">
 		<button
 			type="button"
+			on:click={closeForm}
 			class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
 			>Отмена</button
 		>

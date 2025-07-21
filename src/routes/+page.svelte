@@ -48,6 +48,7 @@
 				<div
 					class="fixed inset-0 bg-gray-500 opacity-75 transition-opacity"
 					aria-hidden="true"
+					on:click={closeModal}
 				></div>
 
 				<div
@@ -64,7 +65,11 @@
 							<h2 class="mb-4 text-lg font-medium text-gray-900">
 								{currentContact ? 'Редактировать контакт' : 'Новый контакт'}
 							</h2>
-							<ContactForm contact={currentContact} on:save={() => closeModal()} />
+							<ContactForm
+								contact={currentContact}
+								on:save={() => closeModal()}
+								on:close={closeModal}
+							/>
 						</div>
 					</div>
 				</div>
