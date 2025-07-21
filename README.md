@@ -1,38 +1,60 @@
-# sv
+# Контакты-приложение
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Приложение для управления контактами с расширенными возможностями поиска и категоризации.
 
-## Creating a project
+## ⚙️ Функционал
+- ✅ Добавление/редактирование/удаление контактов
+- ✅ Группировка контактов по категориям (клиенты, коллеги, друзья)
+- 🔍 Продвинутый поиск с фильтрацией по тегам
+- 📥 Импорт/экспорт контактов (CSV, JSON)
+- 📋 История взаимодействий с каждым контактом
 
-If you're seeing this, you've probably already done this step. Congrats!
-
+## 🚀 Установка
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone https://github.com/yourusername/contacts-app.git
+cd contacts-app
+npm install
+npm start
 ```
 
-## Developing
+## 🖼️ Скриншоты
+| Главный экран | Добавление контакта |
+|---------------|---------------------|
+| ![Главный экран](/screenshots/main.png) | ![Добавление контакта](/screenshots/add-contact.png) |
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 🛠️ API Endpoints
+```javascript
+// Получение списка контактов
+GET /api/contacts
 
-```bash
-npm run dev
+// Фильтрация по категории
+GET /api/contacts?category=clients
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+// Добавление нового контакта
+POST /api/contacts
+{
+  "name": "Иван Иванов",
+  "phone": "+79991234567",
+  "email": "ivan@example.com",
+  "category": "clients"
+}
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
+## 🧩 Архитектура
+```mermaid
+classDiagram
+    class Contact {
+        +String name
+        +String phone
+        +String email
+        +String category
+        +Date createdAt
+        +addInteraction()
+    }
+    class Interaction {
+        +Date date
+        +String type
+        +String notes
+    }
+    Contact "1" -- "*" Interaction
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

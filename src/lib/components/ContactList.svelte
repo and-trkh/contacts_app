@@ -2,10 +2,10 @@
 	import { db, type Contact } from '$lib/db/contactsDB';
 	import { liveQuery } from 'dexie';
 	import { fade } from 'svelte/transition';
-	import { createEventDispatcher } from 'svelte'; // Используется для совместимости со Svelte 4+
+	import EditContactModal from './EditContactModal.svelte';
 
-	const dispatch = createEventDispatcher();
 	export let searchTerm = '';
+	let editingContact: Contact | null = null;
 	$: contactQuery = liveQuery(async () => {
 		const lowerCaseSearchTerm = searchTerm.toLowerCase();
 		if (!lowerCaseSearchTerm) {
@@ -25,6 +25,10 @@
 	async function deleteContact(id: number) {
 		await db.contacts.delete(id);
 	}
+
+	function handleContactClick(contact: Contact) {
+		editingContact = contact;
+	}
 </script>
 
 <div class="overflow-hidden bg-white shadow sm:rounded-md">
@@ -33,10 +37,10 @@
 			<li
 				in:fade
 				class="cursor-pointer px-4 py-4 sm:px-6"
-				on:click={() => dispatch('click:contact', contact)}
+				on:click={() => handleContactClick(contact)}
 				on:keydown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
-						dispatch('click:contact', contact);
+						handleContactClick(contact);
 					}
 				}}
 				tabindex="0"
@@ -73,3 +77,7 @@
 		{/each}
 	</ul>
 </div>
+
+{#if editingContact}
+	<EditContactModal contact={editingContact} onClose={() => (editingContact = null)} />
+{/if}
