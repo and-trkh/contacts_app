@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { db, type Contact } from '$lib/db/contactsDB';
+  import { type Contact } from '$lib/db/contactsDB';
   import ContactForm from '$lib/components/ContactForm.svelte';
   import ContactList from '$lib/components/ContactList.svelte';
   import SearchBar from '$lib/components/SearchBar.svelte';
+  import Overlay from '$lib/components/Overlay.svelte';
 
   let searchTerm = '';
   let showModal = false;
@@ -43,22 +44,9 @@
     <ContactList bind:searchTerm on:click:contact={(event) => openEditModal(event.detail)} />
 
     {#if showModal}
-      <div class="fixed inset-0 z-10 overflow-y-auto">
-        <div
-          class="fixed inset-0 bg-gray-500 opacity-75 transition-opacity"
-          aria-hidden="true"
-          on:click={closeModal}
-          on:keydown={(e) => {
-            if (e.key === 'Escape') {
-              closeModal();
-            }
-          }}
-          role="button"
-          tabindex="0"
-        ></div>
-
+      <Overlay isOpen={showModal} onClose={closeModal} transitionParams={{ y: -50, duration: 300 }}>
         <ContactForm contact={currentContact} on:save={() => closeModal()} onClose={closeModal} />
-      </div>
+      </Overlay>
     {/if}
   </div>
 </div>
